@@ -26,7 +26,7 @@ requirements: List[str] = [
     "h5netcdf",
     "numpy",
     "pyyaml",
-    "mpi4py==3.1.5",
+    "mpi4py",
 ]
 
 setup(

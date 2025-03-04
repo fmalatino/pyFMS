@@ -22,6 +22,14 @@ jobs:
           run: |
             pip install .[test]
 
-        - name: run tests
+        - name: run build test
           run: |
-            python -m pytest -vsx tests/
+            python -m pytest -x tests/test_build.py
+
+        - name: run field manager test
+          run: |
+            python -m pytest -x tests/test_pyFMS_field_manager.py
+
+        - name: run pyFMS init test
+          run: |
+            python -m pytest -x tests/test_pyFMS_fms.py

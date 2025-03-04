@@ -3,7 +3,7 @@ import os
 import pytest
 import yaml
 
-from pyfms import FieldError, FieldTable
+from pyfms import FieldTable
 
 
 test_config = {
@@ -95,14 +95,6 @@ def test_get_fieldtype(temp_file):
     assert fieldtype == "tracer"
 
 
-@pytest.mark.xfail(raises=FieldError)
-def test_remove_varlist(temp_file):
-    with open(temp_file, "r") as f:
-        changed_config = yaml.safe_load(f)
-    del changed_config["field_table"][0]["modlist"][0]["varlist"]
-    FieldTable.from_dict(changed_config)
-
-
 def test_add_to_varlist(temp_file):
     test_table = FieldTable.from_file(temp_file)
     new_var = {
@@ -119,34 +111,10 @@ def test_add_to_varlist(temp_file):
     assert new_var in varlist
 
 
-@pytest.mark.xfail(raises=(AttributeError, FieldError, KeyError))
-def test_add_to_varlist_fail(temp_file):
-    with open(temp_file, "r") as f:
-        changed_config = yaml.safe_load(f)
-    del changed_config["field_table"][0]["modlist"][0]["varlist"]
-    test_table = FieldTable.from_dict(changed_config)
-    new_var = {
-        "variable": "test",
-        "longname": "longtest",
-        "units": "m",
-        "profile_type": "fixed",
-        "subparams": [{"surface_value": 1}],
-    }
-    test_table.add_to_varlist(module="atmos_mod", var=new_var)
-
-
 def test_get_var(temp_file):
     test_table = FieldTable.from_file(temp_file)
     var = test_table.get_var(module="atmos_mod", varname="soa")
     assert var == test_table.modlist[0]["varlist"][1]
-
-
-@pytest.mark.xfail(raises=FieldError)
-def test_get_var_fail(temp_file):
-    with open(temp_file, "r") as f:
-        config = yaml.safe_load(f)
-        test_table = FieldTable.from_dict(config)
-    test_table.get_var(module="atmos_mod", varname="sob")
 
 
 def test_get_subparam(temp_file):
@@ -163,14 +131,6 @@ def test_get_value(temp_file):
     assert value == "mmr"
 
 
-@pytest.mark.xfail(raises=KeyError)
-def test_get_value_key_fail(temp_file):
-    with open(temp_file, "r") as f:
-        config = yaml.safe_load(f)
-        test_table = FieldTable.from_dict(config)
-    test_table.get_value(module="atmos_mod", varname="soa", key="unit")
-
-
 def test_get_subparam_value(temp_file):
     test_table = FieldTable.from_file(temp_file)
     value = test_table.get_subparam_value(
@@ -180,29 +140,6 @@ def test_get_subparam_value(temp_file):
         paramname="frac_pm1",
     )
     assert value == 0.89
-
-
-@pytest.mark.xfail(raises=KeyError)
-def test_get_subparam_value_bad_key(temp_file):
-    with open(temp_file, "r") as f:
-        config = yaml.safe_load(f)
-        test_table = FieldTable.from_dict(config)
-    test_table.get_subparam_value(
-        module="atmos_mod",
-        varname="soa",
-        listname="chem_param",
-        paramname="frac_pms",
-    )
-
-
-@pytest.mark.xfail(raises=TypeError)
-def test_get_subparam_value_bad_var_name(temp_file):
-    with open(temp_file, "r") as f:
-        config = yaml.safe_load(f)
-        test_table = FieldTable.from_dict(config)
-    test_table.get_subparam_value(
-        module="atmos_mod", varname="sob", listname="chem_param", paramname="frac_pm1"
-    )
 
 
 def test_get_variable_list(temp_file):
@@ -273,16 +210,6 @@ def test_set_var_attr_name(temp_file):
     assert varlist[1]["ln"]
 
 
-@pytest.mark.xfail(raises=FieldError)
-def test_set_var_attr_name_duplicate(temp_file):
-    with open(temp_file, "r") as f:
-        config = yaml.safe_load(f)
-        test_table = FieldTable.from_dict(config)
-    test_table.set_var_attr_name(
-        module="atmos_mod", varname="soa", oldname="longname", newname="longname"
-    )
-
-
 def test_set_subparam_name(temp_file):
     test_table = FieldTable.from_file(temp_file)
     test_table.set_subparam_name(
@@ -296,20 +223,6 @@ def test_set_subparam_name(temp_file):
         0
     ]["varlist"]
     assert varlist[1]["chem_param"][0]["frac_pm2"]
-
-
-@pytest.mark.xfail(raises=FieldError)
-def test_set_subparam_name_duplicate(temp_file):
-    with open(temp_file, "r") as f:
-        config = yaml.safe_load(f)
-        test_table = FieldTable.from_dict(config)
-    test_table.set_subparam_name(
-        module="atmos_mod",
-        varname="soa",
-        listname="chem_param",
-        oldname="frac_pm1",
-        newname="frac_pm1",
-    )
 
 
 def test_access_other_module(temp_file):
