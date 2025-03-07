@@ -7,3 +7,5 @@ from .mpp.pyfms_mpp_domains import (
 )
 from .pyfms_field_manager import FieldTable
 from .pyfms_fms import pyFMS
+from .horiz_interp import HorizInterp 
+from .pyfms_utils.grid_utils import GridUtils

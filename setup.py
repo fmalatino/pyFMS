@@ -12,6 +12,11 @@ class CustomInstall(install):
             subprocess.run(["./compile_c_libs.sh"], stdout=f)
         install.run(self)
 
+def local_pkg(name: str, relative_path: str) -> str:
+    """Returns an absolute path to a local package."""
+    path = f"{name} @ file://{Path(os.path.abspath(__file__)).parent / relative_path}"
+    return path
+
 
 test_requirements = ["pytest", "pytest-subtests", "coverage"]
 develop_requirements = test_requirements + ["pre-commit"]
@@ -27,6 +32,7 @@ requirements: List[str] = [
     "numpy",
     "pyyaml",
     "mpi4py",
+    "xarray"
 ]
 
 setup(
@@ -49,5 +55,4 @@ setup(
     url="https://github.com/fmalatino/pyFMS.git",
     version="2024.12.0",
     zip_safe=False,
-    entry_points={},
 )

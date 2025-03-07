@@ -2,10 +2,10 @@
 
 import ctypes
 import os
+from pyfms.horiz_interp import HorizInterp
 from typing import Optional
 
 from pyfms.pyfms_data_handling import set_Cchar, setscalar_Cint32
-
 
 class pyFMS:
 
@@ -39,7 +39,7 @@ class pyFMS:
         self.pyfms_init(
             self.localcomm, self.alt_input_nml_path, self.ndomain, self.nnest_domain
         )
-
+        
     """
     Subroutine: pyfms_end
 
