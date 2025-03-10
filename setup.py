@@ -12,11 +12,6 @@ class CustomInstall(install):
             subprocess.run(["./compile_c_libs.sh"], stdout=f)
         install.run(self)
 
-def local_pkg(name: str, relative_path: str) -> str:
-    """Returns an absolute path to a local package."""
-    path = f"{name} @ file://{Path(os.path.abspath(__file__)).parent / relative_path}"
-    return path
-
 
 test_requirements = ["pytest", "pytest-subtests", "coverage"]
 develop_requirements = test_requirements + ["pre-commit"]
@@ -26,14 +21,7 @@ extras_requires = {
     "develop": develop_requirements,
 }
 
-requirements: List[str] = [
-    "dacite",
-    "h5netcdf",
-    "numpy",
-    "pyyaml",
-    "mpi4py",
-    "xarray"
-]
+requirements: List[str] = ["dacite", "h5netcdf", "numpy", "pyyaml", "mpi4py", "xarray"]
 
 setup(
     author="NOAA/GFDL",
