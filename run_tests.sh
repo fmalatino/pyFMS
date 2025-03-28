@@ -37,4 +37,8 @@ run_test "pytest tests/py_data_override/test_generate_files.py"
 run_test "mpirun -n 6 python -m pytest -m 'parallel' tests/py_data_override/test_data_override.py"
 remove_input "tests/py_data_override/test_data_override.py"
 
+run_test "pytest tests/py_diag_manager/test_generate_files.py"
+run_test "mpirun -n 1 python -m pytest tests/py_diag_manager/test_diag_manager.py"
+remove_input "tests/py_diag_manager/test_diag_manager.py
+
 rm -rf INPUT *logfile* *warnfile*
